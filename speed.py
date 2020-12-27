@@ -6,6 +6,7 @@ import mariadb
 #from mysql.connector import MySQLConnection, Error
 from python_mysql_dbconfig import read_db_config
 
+adjustment = 1
 dist_meas = 0
 nmh = 0
 nm_per_hour = 0
@@ -35,7 +36,7 @@ def calculate_speed(r_cm):
         dist_nm = circ_cm/185200        # convert cm to km
         nm_per_sec = dist_nm / elapse       # calculate Nm/sec
         nm_per_hour = nm_per_sec * 3600     # calculate knots (Nn/h)
-        dist_meas = (dist_nm*pulse) * 1000    # measure distance traverse in meter
+        dist_meas = (dist_nm*pulse) * 1852    # measure distance traverse in meter
         #print(nm_per_hour)
         return nm_per_hour
 
@@ -56,8 +57,8 @@ except mariadb.Error as e:
     sys.exit(1)
     
 while True:
-    calculate_speed(5)  # call this function with wheel radius as parameter
-    print('rpm:{0:.0f}-RPM mh:{1:.2f}-NMH dist_meas:{2:.2f}m pulse:{3}'.format(rpm,nm_per_hour,dist_meas,pulse))
+    calculate_speed(2.5)  # call this function with wheel radius as parameter
+    print('rpm:{0:.0f}-RPM nmh:{1:.3f} -knots dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
     try:
         sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:},{nmh:.3f},{dist_meas:.4f})')
         cursor.execute(sql_insert_query)
