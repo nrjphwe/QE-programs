@@ -36,14 +36,14 @@ def calculate_speed(r_cm):
         dist_nm = circ_cm/185200        # convert cm to km
         nm_per_sec = dist_nm / elapse       # calculate Nm/sec
         nm_per_hour = nm_per_sec * 3600     # calculate knots (Nn/h)
-        dist_meas = (dist_nm*pulse) * 1852    # measure distance traverse in meter
-        #print(nm_per_hour)
+        nmh = nm_per_hour
+        dist_meas = (dist_nm*pulse) * 1852  # measure distance traverse in meter
         return nm_per_hour
 
 def init_interrupt():
-    # add falling edge detection on "sensor" channel, ignoring further edges for 10ms 
+    # add falling edge detection on "sensor" channel, ignoring further edges for 10ms
     GPIO.add_event_detect(sensor, GPIO.FALLING, callback = calculate_elapse, bouncetime = 10)
-# startt 
+# startt
 init_GPIO()
 init_interrupt()
 dbconfig = read_db_config()
@@ -55,12 +55,12 @@ try:
 except mariadb.Error as e:
     print(f"line 29 Error connecting to MariaDB Platform:{e}")
     sys.exit(1)
-    
+
 while True:
     calculate_speed(2.5)  # call this function with wheel radius as parameter
-    print('rpm:{0:.0f}-RPM nmh:{1:.3f} -knots dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
+    print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
     try:
-        sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:},{nmh:.3f},{dist_meas:.4f})')
+        sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
         cursor.execute(sql_insert_query)
         conn.commit()
     except mariadb.Error as e:
