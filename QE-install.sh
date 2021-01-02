@@ -7,7 +7,7 @@ set -x
 cd "$(dirname "$0")/.."
 
 # We start the power_check script on boot by using systemd file 
-sudo cp -v script/power_check.service /lib/systemd/system
+sudo cp -v QE-programs/power_check.service /lib/systemd/system
 sudo chmod u+x /lib/systemd/system/power_check.service
 sudo systemctl daemon-reload
 sudo systemctl enable power_check.service
@@ -15,13 +15,9 @@ sudo systemctl start power_check.service
 systemctl status power_check.service
 
 echo "=> Installing power check php files at /var/www/html/...\n"
-sudo cp -v w3.css /var/www/html
+sudo cp -v QE-programs/w3.css /var/www/html
 sudo chmod -R 755 /var/www/html/
 sudo chown -R www-data:www-data /var/www/html
-
-echo "=> setup for ADS1115 ...\n"
-sudo apt-get -y install python3-pip
-sudo pip3 install adafruit-circuitpython-ads1x15
 
 echo "=> setup SQL-Mariadb:...\n"
 sudo apt -y install mariadb-server mariadb-client
@@ -72,3 +68,7 @@ systemctl status grafana-server
 # export SQL_DB=‘regattastart'
 # 
 # then do source ~/.bash_profile
+
+#echo "=> setup for ADS1115 ...\n"
+#sudo apt-get -y install python3-pip
+#sudo pip3 install adafruit-circuitpython-ads1x15
