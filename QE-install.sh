@@ -60,15 +60,6 @@ sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 systemctl status grafana-server
 
-# Create a credential file for mysql
-# by nano ~/.bash_profile and add this text
-# export SQL_HOST=‘localhost’
-# export SQL_USER=‘pi’
-# export SQL_PWD=‘password’
-# export SQL_DB=‘regattastart'
-# 
-# then do source ~/.bash_profile
-
 #echo "=> setup for ADS1115 ...\n"
 #sudo apt-get -y install python3-pip
 #sudo pip3 install adafruit-circuitpython-ads1x15
