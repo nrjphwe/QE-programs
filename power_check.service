@@ -1,0 +1,10 @@
+[Unit]
+Description=My power_check service
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 -u /home/pi/QE-programs/power_check.py > /home/pi/QE-programs/power_check.log 2>&1
+
+[Install]
+WantedBy=multi-user.target
