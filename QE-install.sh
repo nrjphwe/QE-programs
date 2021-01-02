@@ -48,7 +48,7 @@ sleep 5
 systemctl status mariadb.service
 
 # import/add sql data to db
-mysql -h localhost -u pi -p < mysql.txt
+mysql -h localhost -u pi -p < QE-Programs/mysql.txt
 
 # install Grafana
 sudo apt-get install -y adduser libfontconfig1
