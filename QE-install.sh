@@ -48,7 +48,8 @@ sleep 5
 systemctl status mariadb.service
 
 # import/add sql data to db
-mysql -h localhost -u pi -p < QE-install/mysql.txt
+=======
+mysql -h localhost -u pi -p < QE-Programs/mysql.txt
 
 # install Grafana
 sudo apt-get install -y adduser libfontconfig1
@@ -59,15 +60,6 @@ sudo /bin/systemctl enable grafana-server
 ### You can start grafana-server by executing
 sudo /bin/systemctl start grafana-server
 systemctl status grafana-server
-
-# Create a credential file for mysql
-# by nano ~/.bash_profile and add this text
-# export SQL_HOST=‘localhost’
-# export SQL_USER=‘pi’
-# export SQL_PWD=‘password’
-# export SQL_DB=‘regattastart'
-# 
-# then do source ~/.bash_profile
 
 #echo "=> setup for ADS1115 ...\n"
 #sudo apt-get -y install python3-pip
