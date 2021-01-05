@@ -6,8 +6,8 @@ set -x
 
 cd "$(dirname "$0")/.."
 
-# We start the power_check script on boot by using systemd file 
-sudo cp -v QE-programs/power_check.service /lib/systemd/system
+# We start the power_check script on boot by using systemd file
+sudo cp -v QE-Programs/power_check.service /lib/systemd/system
 sudo chmod u+x /lib/systemd/system/power_check.service
 sudo systemctl daemon-reload
 sudo systemctl enable power_check.service
@@ -15,7 +15,7 @@ sudo systemctl start power_check.service
 systemctl status power_check.service
 
 echo "=> Installing power check php files at /var/www/html/...\n"
-sudo cp -v QE-programs/w3.css /var/www/html
+sudo cp -v QE-Programs/w3.css /var/www/html
 sudo chmod -R 755 /var/www/html/
 sudo chown -R www-data:www-data /var/www/html
 
@@ -48,7 +48,7 @@ sleep 5
 systemctl status mariadb.service
 
 # import/add sql data to db
-mysql -h localhost -u pi -p < mysql.txt
+mysql -h localhost -u pi -p < QE-install/mysql.txt
 
 # install Grafana
 sudo apt-get install -y adduser libfontconfig1
