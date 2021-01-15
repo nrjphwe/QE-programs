@@ -61,6 +61,6 @@ sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 systemctl status grafana-server
 
-#echo "=> setup for ADS1115 ...\n"
-#sudo apt-get -y install python3-pip
-#sudo pip3 install adafruit-circuitpython-ads1x15
+echo "=> setup for ADS1115 ...\n"
+sudo apt-get -y install python3-pip
+sudo pip3 install adafruit-circuitpython-ads1x15
