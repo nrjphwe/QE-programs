@@ -1,30 +1,37 @@
 #!/usr/bin/env python3
+# /etc/init.d/power_check.py
+### BEGIN INIT INFO
+# Provides:          power_check.py
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# Description:       Enable service provided by daemon.
+### END INIT INFO
+
 import os
 import sys
 import mariadb
-import mysql.connector
-from mysql.connector import Error
 import datetime #new
 import time
 import board
 import busio
 import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+#New
+#from mysql.connector import MySQLConnection, Error
 from python_mysql_dbconfig import read_db_config
 
-def connect():
-    """ Connect to MariaDB """
-    dbconfig = read_db_config()
-    conn = None
-    try:
-        print('Connecting to MariaDBSQL database...')
-        conn = mariadb.connect(**dbconfig)
-        cursor = conn.cursor()
-    except mariadb.Error as e:
-       print(f"Error connecting to MariaDB Platform: {e}")
-       sys.exit(1)
-if __name__ == '__main__':
-    connect()
+dbconfig = read_db_config()
+conn = None
+
+try:
+   conn = mariadb.connect(**dbconfig)
+   cursor = conn.cursor()
+except mariadb.Error as e:
+   print(f"Error connecting to MariaDB Platform: {e}")
+   sys.exit(1)
 
 try:
    # def Add data
