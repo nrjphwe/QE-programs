@@ -3,4 +3,4 @@ Connect to your Raspberry Pi via SSH the Clone this repo: git clone https://gith
 
 Then do: CD QE-programs and ./QE-install
 
-Need to update the config.ini to your mysql password.
+Need to update the config.ini file to your mysql password.
