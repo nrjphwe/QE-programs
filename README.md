@@ -15,3 +15,4 @@ Pin 5 i2c SCL
 Pin 6 Ground
 Pin 7 GPIO4 used for shutdown
 Pin 9 Ground used for shutdown
+pin 12 used for speed pulses
