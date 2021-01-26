@@ -7,14 +7,14 @@ import mariadb
 from python_mysql_dbconfig import read_db_config
 
 #your params to set:
-sleeptime= 1 #secs between reporting loop
+sleeptime= 1  #secs between reporting loop
 gustint= 3    #secs to calc gust (>sleeptime)
 avgint= 45    #secs to trigger average calc (>gustint)
 secsnoread= 6 #number of seconds rotor is stationary before a 'no read' is declared and set result to zero - depends on inertia of your rotor in light >no wind
 errortime= 90 #number of seconds of no activity before error/stationary warning is shown - set high after debugging
 loopcount= 0  #a 'nothing is happening' counter
 r_cm = 2.5    #cm wheel radius as parameter (assumed centre of cups)
-sensor = 18   #BCM
+sensor = 13   #BCM
 magnets = 1   #how many magnets in your rotor? (code assumes one sensor though)
 
 # startup numbers
@@ -27,7 +27,6 @@ nmh = 0
 nm_per_hour = 0
 rpm = 0
 elapse = 0
-sensor = 18
 pulse = 0
 start_timer = time.time()
 gust_timer = time.time() #start of this gust timing
@@ -129,7 +128,7 @@ while True:
             loopcount=secsnoread/sleeptime+1 #reset loopcount
             report('error')
         sleep(sleeptime)
-    #print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
+    print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
     try:
         sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
         cursor.execute(sql_insert_query)
