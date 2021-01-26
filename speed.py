@@ -8,8 +8,6 @@ from python_mysql_dbconfig import read_db_config
 
 #your params to set:
 sleeptime= 1 #secs between reporting loop
-gustint= 3    #secs to calc gust (>sleeptime)
-avgint= 45    #secs to trigger average calc (>gustint)
 secsnoread= 6 #number of seconds rotor is stationary before a 'no read' is declared and set result to zero - depends on inertia of your rotor in light >no wind
 errortime= 90 #number of seconds of no activity before error/stationary warning is shown - set high after debugging
 loopcount= 0  #a 'nothing is happening' counter
@@ -23,17 +21,12 @@ dist_meas = 0
 olddist_meas = 0
 circ_cm = (2*math.pi) * r_cm  # calculate wheel circumference in CM
 dist_nm = circ_cm/185200/magnets
-nmh = 0
 nm_per_hour = 0
 rpm = 0
 elapse = 0
 sensor = 18
 pulse = 0
 start_timer = time.time()
-gust_timer = time.time() #start of this gust timing
-gustm_start=dist_meas #start of this gust distance
-avg_timer = time.time() #start of this average timing
-avgm_start=dist_meas #start of average distance
 
 def init_GPIO():                    # initialize GPIO
     GPIO.setmode(GPIO.BCM)
@@ -61,32 +54,6 @@ def calculate_speed():
         return nm_per_hour
     except ZeroDivisionError:
         pass
-
-def calcgust():
-        global gust_timer,gustm_start,avg_timer,avgm_start,gust,avg
-        gustime = time.time() - gust_timer  # how long since start of gust check?
-        if gustime >= gustint:           #then calc average speed over gust time
-            gustkm=(dist_meas - gustm_start)/1000 #how far since start of gust check
-            thisgust=gustkm/gustime*3600
-            #print('gust',gustime,gustkm,thisgust,gust)
-            if thisgust>gust:
-                gust=thisgust
-            gust_timer = time.time()#reset
-            gustm_start=dist_meas
-        avgtime = time.time() - avg_timer	    # how long since start of avg check?
-        if avgtime >= avgint:    #then calc average speed over avg time
-            avgkm=(dist_meas - avgm_start)/1000 #how far since start of avgcheck
-            thisavg=avgkm/avgtime*3600
-            #print('avg',avgtime,avgint, avgkm,thisavg)
-            avg=thisavg
-            avg_timer = time.time()#reset
-            avgm_start=dist_meas
-            gust_timer = time.time()
-            gustm_start=dist_meas
-            if avg!=0:
-                report('average')
-            gust=0  #reset max gust over average duration as well
-            avg=0   #and reset avg in case of calm
 
 def report(mode):
         if mode=='realtime': #comment this mode if you want a quieter report, or use
