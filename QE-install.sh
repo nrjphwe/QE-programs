@@ -53,8 +53,13 @@ mysql -h localhost -u pi -p < QE-Programs/mysql.txt
 
 # install Grafana
 sudo apt-get install -y adduser libfontconfig1
-wget https://dl.grafana.com/oss/release/grafana_7.3.1_armhf.deb
+# for raspberry Pi 3
+wget https://dl.grafana.com/oss/release/grafana_7.3.7_armhf.deb
 sudo dpkg -i grafana_7.3.1_armhf.deb
+# for raspberry pi Zero
+#wget https://dl.grafana.com/oss/release/grafana-rpi_7.3.7_armhf.deb
+#sudo dpkg -i grafana-rpi_7.3.7_armhf.deb
+
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable grafana-server
 ### You can start grafana-server by executing
