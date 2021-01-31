@@ -14,5 +14,5 @@ The shut down uses GPIO4, which is Pin 7 and pin 9 (ground)
 - Pin 5 i2c SCL (GPIO3)
 - Pin 6 Ground
 - Pin 7 GPIO4 used for shutdown
-- Pin 9 Ground used for shutdown
+- Pin 9 Ground used for shutdown (could maybe use 6 GMND as well?)
 - Pin 12 GPIO18 used for speed pulses
