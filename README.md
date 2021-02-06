@@ -15,3 +15,6 @@ The shut down uses GPIO4, which is Pin 7 and pin 9 (ground)
 - Pin 6 Ground, Ground used for shutdown (could maybe use 6 GND as well?)
 - Pin 7 GPIO4 used for shutdown
 - Pin 8 GPIO14 used for speed pulses
+
+
+To get into phpmyadmin: http://192.xxx.x.xxx/phpmyadmin/
