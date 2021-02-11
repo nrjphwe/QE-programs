@@ -18,3 +18,6 @@ The shut down uses GPIO4, which is Pin 7 and pin 9 (ground)
 
 
 To get into phpmyadmin: http://192.xxx.x.xxx/phpmyadmin/
+
+
+run i2cdetect -y 1, I get a readout showing all i2c busses attached.
