@@ -2,3 +2,4 @@ create database regattastart;
 use regattastart;
 create table power_check (id int(10) NOT NULL auto_increment key, volt DECIMAL(10,3), amp DECIMAL(10,3),timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 create table knots (id int(10) NOT NULL auto_increment key, rpm DECIMAL (4,0), nmh DECIMAL(10,3), dist_meas DECIMAL(10,0),pulse DECIMAL (10,0), timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+create table wind (id int(10) NOT NULL auto_increment key, angle DECIMAL (3,1), timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
