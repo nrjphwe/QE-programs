@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import RPi.GPIO as GPIO
 from time import sleep
-import time, math
+import sys, time, math
 import board
 import busio
 import adafruit_ads1x15.ads1015 as ADS
@@ -29,7 +29,6 @@ def get_average(angles):
         average = arc + 180
     elif s < 0 and c > 0:
         average = arc + 360
-
     return 0.0 if average == 360 else average
 
 # Create the I2C bus
@@ -40,7 +39,7 @@ ads = ADS.ADS1015(i2c)
 ads.gain = 2/3
 
 # Create differential input between channel 0 and 1
-chan = AnalogIn(ads, ADS.P0, ADS.P1)
+chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
 
 # setup db
 dbconfig = read_db_config()
@@ -52,6 +51,17 @@ try:
 except mariadb.Error as e:
     print(f"line 29 Error connecting to MariaDB Platform:{e}")
     sys.exit(1)
+
+try:
+   # def Add data
+   def add_data(cursor,angle):
+      """Adds the given data to the wind table"""
+      sql_insert_query = (f'INSERT INTO wind (angle) VALUES ({angle:.1f})')
+      cursor.execute(sql_insert_query)
+      conn.commit()
+except mariadb.Error as e:
+   print(f"Error adding data to Maridb: {e}")
+   sys.exit(1)
 
 # Wind
 count = 0
@@ -77,23 +87,22 @@ def get_value(length=5):
         elif (wind_volt > 0.62): angle = 157.5; # SSE
         elif (wind_volt > 0.52): angle = 90; # E
         elif (wind_volt > 0.48): angle = 67.5; # ENE
-        elif (wind_volt > 0.38): angle = 112.6 # ESE
+        elif (wind_volt > 0.38): angle = 112.5 # ESE
         else: angle = 400; # Err
-
         if not wind_volt in values: # keep only good measurements
             print('unknown value ' + str(angle) + ' ' + str(wind_volt))
             values.append(wind_volt)
-    data.append(angle)
+        data.append(angle)
     return get_average(data)
 
 if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
      while True:
-          print(get_value())
+          print (get_value())
+          angle = round(get_value(),1)
+          print('angle ' + ' ' + str(angle))
           try:
-              sql_insert_query = (f'INSERT INTO wind (angle) VALUES ({angle:1f}')
-              cursor.execute(sql_insert_query)
-              conn.commit()
+              add_data(cursor, angle)
           except mariadb.Error as e:
               print(f"line 81 Error inserting to db: {e}")
               sys.exit(1)

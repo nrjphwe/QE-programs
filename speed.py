@@ -12,7 +12,7 @@ secsnoread= 6 #number of seconds rotor is stationary before a 'no read' is decla
 errortime= 90 #number of seconds of no activity before error/stationary warning is shown - set high after debugging
 loopcount= 0  #a 'nothing is happening' counter
 r_cm = 2.5    #cm wheel radius as parameter (assumed centre of cups)
-sensor = 13   #BCM
+sensor = 14   #BCM
 magnets = 1   #how many magnets in your rotor? (code assumes one sensor though)
 
 # startup numbers
