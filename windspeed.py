@@ -24,18 +24,6 @@ except mariadb.Error as e:
    print(f"Error connecting to MariaDB Platform: {e}")
    sys.exit(1)
 
-try:
-   # def Add data
-   def add_data(rpm, nmh, dist_meas,angle):
-      """Adds the given data to the tables"""
-      sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
-      sql_insert_query = (f'INSERT INTO wind (angle) VALUES ({angle:.1f})')
-      cursor.execute(sql_insert_query)
-      conn.commit()
-
-except mariadb.Error as e:
-   print(f"Error adding data to Maridb: {e}")
-   sys.exit(1)
 
 # Create the I2C bus
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -138,6 +126,8 @@ def init_interrupt():
     # add falling edge detection on "sensor" channel, ignoring further edges for 10ms
     GPIO.add_event_detect(sensor, GPIO.FALLING, callback = calculate_elapse, bouncetime = 10)
 
+   
+   
 # Wind
 count = 0
 values = []
@@ -169,6 +159,19 @@ def get_value(length=5):
             values.append(wind_volt)
         data.append(angle)
     return get_average(data)
+
+try:
+   # def Add data
+   def add_data(rpm, nmh, dist_meas,angle):
+      """Adds the given data to the tables"""
+      sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
+      sql_insert_query = (f'INSERT INTO wind (angle) VALUES ({angle:.1f})')
+      cursor.execute(sql_insert_query)
+      conn.commit()
+
+except mariadb.Error as e:
+   print(f"Error adding data to Maridb: {e}")
+   sys.exit(1)
 
 # startt
 init_GPIO()
