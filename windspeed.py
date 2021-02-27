@@ -2,6 +2,7 @@
 
 import os
 import sys,time, math
+from time import sleep
 import mariadb
 import datetime #new
 import board
