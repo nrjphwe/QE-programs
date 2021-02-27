@@ -146,7 +146,7 @@ def get_value(length=5):
     print("Measuring wind direction for %d seconds..." % length)
     start_time = time.time()
     while time.time() - start_time <= length:
-        wind_volt =round(chan_diff.voltage,2)
+        wind_volt =round(chan_diff1.voltage,2)
         if (wind_volt > 4.55 ): angle = 270;    # W
         elif (wind_volt > 4.30): angle = 315;   # NW
         elif (wind_volt > 4.00): angle = 292.5; # WNW
