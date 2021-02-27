@@ -98,7 +98,7 @@ def calculate_elapse(channel):              # callback function
     start_timer = time.time()           # let current time equals to start_timer
 
 def calculate_speed():
-    global elapse,rpm,dist_meas,oldist_meas,nm_per_hour
+    global elapse,rpm,dist_meas,oldist_meas,nmh
     try:
         rpm = 1/elapse * 60    # 1 interupt per rotation, 1 magnet out of 4 paddels
         dist_nm = circ_cm/185200        # convert cm to nm
