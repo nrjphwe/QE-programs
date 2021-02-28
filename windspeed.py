@@ -193,7 +193,7 @@ if __name__ == "__main__":
         print (get_value())
         angle = round(get_value(),1)
         print('angle ' + ' ' + str(angle))
-        print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
+        print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f},start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
         try:
             add_data(cursor,rpm, nm_per_hour, dist_meas, angle)
         except mariadb.Error as e:
