@@ -3,10 +3,27 @@ import RPi.GPIO as GPIO
 from datetime import *
 from time import sleep
 import time, math
+
+# setup db
 import mariadb
 from python_mysql_dbconfig import read_db_config
+dbconfig = read_db_config()
+conn = None
+try:
+   print('connecting to Mysql DB..')
+   conn = mariadb.connect(**dbconfig)
+   cursor = conn.cursor()
+except mariadb.Error as e:
+   print(f"Error connecting to MariaDB Platform: {e}")
+   sys.exit(1)
 
-#your params to set:
+# initialize GPIO
+def init_GPIO():           # initialize GPIO
+   GPIO.setmode(GPIO.BCM)
+   GPIO.setwarnings(False)
+   GPIO.setup(sensor,GPIO.IN,GPIO.PUD_UP)
+
+# speed params to set:
 sleeptime= 1  #secs between reporting loop
 secsnoread= 6 #number of seconds rotor is stationary before a 'no read' is declared and set result to zero - depends on inertia of your rotor in light >no wind
 errortime= 90 #number of seconds of no activity before error/stationary warning is shown - set high after debugging
@@ -27,11 +44,6 @@ elapse = 0
 pulse = 0
 start_timer = time.time()
 avg_timer = time.time() #start of this average timing
-
-def init_GPIO():                    # initialize GPIO
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    GPIO.setup(sensor,GPIO.IN,GPIO.PUD_UP)
 
 def calculate_elapse(channel):              # callback function
     global pulse, start_timer, elapse
@@ -67,18 +79,20 @@ def report(mode):
 def init_interrupt():
     # add falling edge detection on "sensor" channel, ignoring further edges for 10ms
     GPIO.add_event_detect(sensor, GPIO.FALLING, callback = calculate_elapse, bouncetime = 10)
+
+try: # def Add data to Mariadb
+   def add_data(cursor, rpm, nm_per_hour, dist_meas):
+      """Adds the given data to the tables"""
+      sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
+      cursor.execute(sql_insert_query)
+      conn.commit()
+      except mariadb.Error as e:
+        print(f"Error adding data to Maridb: {e}")
+        sys.exit(1)
+        
 # startt
 init_GPIO()
 init_interrupt()
-dbconfig = read_db_config()
-conn = None
-try:
-    print('connecting to Mysql DB..')
-    conn = mariadb.connect(**dbconfig)
-    cursor = conn.cursor()
-except mariadb.Error as e:
-    print(f"line 29 Error connecting to MariaDB Platform:{e}")
-    sys.exit(1)
 
 while True:
     olddist_meas = dist_meas
@@ -96,12 +110,7 @@ while True:
         sleep(sleeptime)
     print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
     try:
-        sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
-        cursor.execute(sql_insert_query)
-        conn.commit()
-    except mariadb.Error as e:
-        print(f"line 81 Error inserting to db: {e}")
-        sys.exit(1)
+        add_data(cursor,rpm, nm_per_hour, dist_meas)
 print(f"Last Inserted ID: {cursor.lastrowid}")
 cursor.close()
 conn.close()
