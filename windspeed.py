@@ -10,6 +10,7 @@ import busio
 import RPi.GPIO as GPIO
 import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+
 # setup db
 import mariadb
 from python_mysql_dbconfig import read_db_config
@@ -24,6 +25,11 @@ except mariadb.Error as e:
    print(f"Error connecting to MariaDB Platform: {e}")
    sys.exit(1)
 
+# initialize GPIO
+def init_GPIO():           # initialize GPIO
+   GPIO.setmode(GPIO.BCM)
+   GPIO.setwarnings(False)
+   GPIO.setup(sensor,GPIO.IN,GPIO.PUD_UP)
 
 # Create the I2C bus
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -86,11 +92,6 @@ pulse = 0
 start_timer = time.time()
 avg_timer = time.time() #start of this average timing
 
-def init_GPIO():                    # initialize GPIO
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    GPIO.setup(sensor,GPIO.IN,GPIO.PUD_UP)
-
 def calculate_elapse(channel):              # callback function
     global pulse, start_timer, elapse
     pulse+=1                    # increase pulse by 1 whenever interrupt occurred
@@ -98,7 +99,7 @@ def calculate_elapse(channel):              # callback function
     start_timer = time.time()           # let current time equals to start_timer
 
 def calculate_speed():
-    global elapse,rpm,dist_meas,oldist_meas,nmh
+    global elapse,rpm,dist_meas,oldist_meas,nm_per_hour
     try:
         rpm = 1/elapse * 60    # 1 interupt per rotation, 1 magnet out of 4 paddels
         dist_nm = circ_cm/185200        # convert cm to nm
@@ -122,16 +123,15 @@ def report(mode):
             print(datetime.now().ctime(),'dead calm or connection fault') #report rotor still stationary
         else:
             print('bad report mode')
+
 def init_interrupt():
     # add falling edge detection on "sensor" channel, ignoring further edges for 10ms
     GPIO.add_event_detect(sensor, GPIO.FALLING, callback = calculate_elapse, bouncetime = 10)
-
    
-   
-# Wind
+# Wind Get Value
 count = 0
 values = []
-def get_value(length=5):
+def get_value(length=5):      # Def wind Get Value
     data = []
     print("Measuring wind direction for %d seconds..." % length)
     start_time = time.time()
@@ -162,7 +162,7 @@ def get_value(length=5):
 
 try:
    # def Add data
-   def add_data(rpm, nmh, dist_meas,angle):
+   def add_data(rpm, nm_per_hour, dist_meas,angle):
       """Adds the given data to the tables"""
       sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
       sql_insert_query = (f'INSERT INTO wind (angle) VALUES ({angle:.1f})')
@@ -195,9 +195,9 @@ if __name__ == "__main__":
         print (get_value())
         angle = round(get_value(),1)
         print('angle ' + ' ' + str(angle))
-        print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nmh,dist_meas,pulse, elapse, start_timer))
+        print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
         try:
-            add_data(cursor,rpm, nmh, dist_meas, angle)
+            add_data(cursor,rpm, nm_per_hour, dist_meas, angle)
         except mariadb.Error as e:
             print(f"Error inserting to db: {e}")
         sys.exit(1)
