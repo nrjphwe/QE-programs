@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 import os
 import sys,time, math
 from time import sleep
@@ -198,7 +197,7 @@ if __name__ == "__main__":
             add_data(cursor,rpm, nm_per_hour, dist_meas, angle)
         except mariadb.Error as e:
             print(f"Error inserting to db: {e}")
-        sys.exit(1)
+            sys.exit(1)
         time.sleep(5)
 print(f"Last Inserted ID: {cursor.lastrowid}")
 cursor.close()
