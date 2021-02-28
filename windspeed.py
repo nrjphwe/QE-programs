@@ -35,10 +35,9 @@ def init_GPIO():           # initialize GPIO
 i2c = busio.I2C(board.SCL, board.SDA)
 # Create the ADC object using the I2C bus
 ads = ADS.ADS1015(i2c)
+chan1_diff = AnalogIn(ads, ADS.P0, ADS.P1) # Create differential input between channel 0 and 1
+chan2_diff = AnalogIn(ads, ADS.P2, ADS.P3) # Create differential input between channel 2 and 3
 
-# Create differential input between channel 0 and 1
-chan1_diff = AnalogIn(ads, ADS.P0, ADS.P1)
-chan2_diff = AnalogIn(ads, ADS.P2, ADS.P3)
 #To boost small signals, the gain can be adjusted on the ADS1x15 chips in the following steps:
 #GAIN_TWOTHIRDS (for an input range of +/- 6.144V)
 #// ads1015.setGain(GAIN_TWOTHIRDS); // 2/3x gain +/- 6.144V 1 bit = 3mV (default)
@@ -160,9 +159,8 @@ def get_value(length=5):      # Def wind Get Value
         data.append(angle)
     return get_average(data)
 
-try:
-   # def Add data
-   def add_data(rpm, nm_per_hour, dist_meas,angle):
+try: # def Add data to Mariadb
+   def add_data(cursor, rpm, nm_per_hour, dist_meas, angle):
       """Adds the given data to the tables"""
       sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
       sql_insert_query = (f'INSERT INTO wind (angle) VALUES ({angle:.1f})')
