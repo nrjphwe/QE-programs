@@ -2,7 +2,6 @@
 import os
 import sys,time, math
 from time import sleep
-import datetime #new
 from datetime import *
 import board
 import busio
