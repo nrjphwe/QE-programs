@@ -1,8 +1,9 @@
 #!/usr/bin/python3
-import os
-import sys,time, math
-from time import sleep
+import RPi.GPIO as GPIO
 from datetime import *
+from time import sleep
+import sys, time, math
+import os
 import board
 import busio
 import RPi.GPIO as GPIO
