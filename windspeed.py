@@ -2,9 +2,8 @@
 import os
 import sys,time, math
 from time import sleep
-from datetime import *
-import mariadb
 import datetime #new
+from datetime import *
 import board
 import busio
 import RPi.GPIO as GPIO
