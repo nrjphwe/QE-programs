@@ -80,12 +80,15 @@ def init_interrupt():
     # add falling edge detection on "sensor" channel, ignoring further edges for 10ms
     GPIO.add_event_detect(sensor, GPIO.FALLING, callback = calculate_elapse, bouncetime = 10)
 
-try: # def Add data to Mariadb
-   def add_data(cursor, rpm, nm_per_hour, dist_meas):
-      """Adds the given data to the tables"""
+def add_data(cursor, rpm, nm_per_hour, dist_meas):
+   try: # def Add data to Mariadb
+       """Adds the given data to the tables"""
       sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
       cursor.execute(sql_insert_query)
       conn.commit()
+   except mariadb.Error as e:
+      print(f"Error inserting to db: {e}")
+      sys.exit(1)
            
 # startt
 init_GPIO()
