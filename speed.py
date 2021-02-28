@@ -86,30 +86,29 @@ try: # def Add data to Mariadb
       sql_insert_query = (f'INSERT INTO knots (rpm, nmh, dist_meas) VALUES ({rpm:2f},{nm_per_hour:.3f},{dist_meas:.2f})')
       cursor.execute(sql_insert_query)
       conn.commit()
-     
-        
+           
 # startt
 init_GPIO()
 init_interrupt()
-
-while True:
-    olddist_meas = dist_meas
-    calculate_speed()
-    if olddist_meas!=dist_meas:
-        loopcount=0
-        report('realtime')
-    else:
-        loopcount+=1
-        if loopcount==secsnoread/sleeptime: #its stopped, force show a zero as it might be 'between magnets' and show last value
+if __name__ == "__main__":
+   while True:
+      olddist_meas = dist_meas
+      calculate_speed()
+      if olddist_meas!=dist_meas:
+         loopcount=0
+         report('realtime')
+      else:
+         loopcount+=1
+         if loopcount==secsnoread/sleeptime: #its stopped, force show a zero as it might be 'between magnets' and show last value
             report('realtime')
-        if loopcount==20/sleeptime: #after each 60 secs
+         if loopcount==20/sleeptime: #after each 60 secs
             loopcount=secsnoread/sleeptime+1 #reset loopcount
             report('error')
-        sleep(sleeptime)
-    print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
-    try:
-        add_data(cursor,rpm, nm_per_hour, dist_meas)
-    except mariadb.Error as e:
+         sleep(sleeptime)
+         print('rpm:{0:.2f}-RPM, nmh:{1:.3f}-knots, dist_meas:{2:.2f}m pulse:{3} elapse:{4:.3f}-start_timer:{5:.3f}'.format(rpm,nm_per_hour,dist_meas,pulse, elapse, start_timer))
+      try:
+         add_data(cursor,rpm, nm_per_hour, dist_meas)
+      except mariadb.Error as e:
          print(f"Error inserting to db: {e}")
          sys.exit(1)      
 print(f"Last Inserted ID: {cursor.lastrowid}")
