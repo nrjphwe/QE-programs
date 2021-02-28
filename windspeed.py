@@ -198,7 +198,8 @@ if __name__ == "__main__":
         except mariadb.Error as e:
             print(f"Error inserting to db: {e}")
             sys.exit(1)
-        time.sleep(5)
+        #time.sleep(5)
 print(f"Last Inserted ID: {cursor.lastrowid}")
+time.sleep(5)
 cursor.close()
 conn.close()
