@@ -1,4 +1,4 @@
-import serial, pynmea2, string
+import serial, pynmea2, string, sys
 # setup db
 import mariadb
 from python_mysql_dbconfig import read_db_config
@@ -15,13 +15,12 @@ except mariadb.Error as e:
 def add_data(cursor, lat, lon, speed, true_course):
    try: # def Add data to Mariadb
       """Adds the given data to the tables"""
-      sql_insert_query = (f'INSERT INTO gps (lat, lon, speed, true_course) VALUES ({lat:3f},{lon:.3f},{speed:.2f},{true_course:.2f})')
+      sql_insert_query = (f'INSERT INTO gps (lat, lon, speed, true_course) VALUES ({lat},{lon},{speed},{true_course})')
       cursor.execute(sql_insert_query)
       conn.commit()
    except mariadb.Error as e:
       print(f"Error inserting to db: {e}")
-      sys.exit(1)    
-   
+      sys.exit(1)
 list_of_valid_statuses = ['A','V']
 
 with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
@@ -55,7 +54,7 @@ with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
                 true_course = msg.true_course
                 print ('True Course = '+ str(true_course))
                 try:
-                    add_data(cursor,lat, lon, speed, true_course)
+                    add_data(cursor, msg.latitude, msg.longitude, speed, true_course)
                 except mariadb.Error as e:
                     print(f"Error inserting to db: {e}")
                     sys.exit(1)
