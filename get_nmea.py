@@ -19,7 +19,7 @@ def init_GPIO():           # initialize GPIO
    GPIO.setwarnings(False)
    GPIO.setup(sensor,GPIO.IN,GPIO.PUD_UP) #### question
 
-def add_data(cursor, rpm, nm_per_hour, dist_meas):
+def add_data(cursor, lat, lon, speed, true_course):
    try: # def Add data to Mariadb
       """Adds the given data to the tables"""
       sql_insert_query = (f'INSERT INTO gps (lat, lon, speed, true_course) VALUES ({lat:10f},{lon:.10f},{speed:.2f},{true_course:.2f})')
