@@ -55,6 +55,7 @@ with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
                 #for i in range(len(msg.fields)):
                 #    print (msg.fields[i], msg.data[i])
                 lat = msg.lat
+                print (lat)
                 lon = msg.lon
                 #lat = ("%02d°%07.4f'" % (msg.latitude, msg.latitude_minutes))
                 #lon = ("%02d°%07.4f'" % (msg.longitude, msg.longitude_minutes))
