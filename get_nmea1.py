@@ -5,9 +5,9 @@ import sys,math
 # startup numbers
 lat = 19.0
 lon = 58.0
-wind_direction = 45
-speed = 0
-true_course = 22
+wind_direction = 45.0
+speed = 0.0
+true_course = 22.0
 
 # setup db
 import mariadb
