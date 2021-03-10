@@ -67,7 +67,7 @@ with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
                 print ('Speed over ground = ' + str(speed))
                 true_course = msg.true_course
                 print ('True Course = '+ str(true_course))
-                alpha = true_course - wind-direction
+                alpha = true_course - wind_direction
                 print (alpha)
                 wmg = cos(alpha)
                 print(wmg)
