@@ -57,7 +57,7 @@ def read_gps_data(lat, lon, speed, true_course):
                speed = msg.spd_over_grnd
                print ('Speed over ground = ' + str(speed))
                true_course = msg.true_course
-               print ('True Course = '+ str(true_course)
+               print ('True Course = '+ str(true_course))
 
 if __name__ == "__main__":
    while Thrue:
