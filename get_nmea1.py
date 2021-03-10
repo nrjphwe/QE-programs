@@ -62,7 +62,7 @@ def read_gps_data(lat, lon, speed, true_course):
 
 if __name__ == "__main__":
    while True:
-      read_gps_data()
+      read_gps_data(lat, lon, speed, true_course)
       alpha = true_course - wind_direction
       print (alpha)
       wmg = math.cos(alpha)*speed
