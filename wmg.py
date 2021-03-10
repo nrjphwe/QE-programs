@@ -138,7 +138,7 @@ if __name__ == "__main__":
           wind_dir = round(get_value(),1)
           print('wind_dir = '+ str(wind_dir))
           #read_gps_data(lat, lon, speed, true_course)
-          read_gps_data(lat, lon, speed, true_course)   
+          read_gps_data()   
           print('speed = ' + str(speed))
           print (true_course)
           speed = round(speed,1)
