@@ -70,6 +70,7 @@ def get_average(angles):
     elif s < 0 and c > 0:
         average = arc + 360
     return 0.0 if average == 360 else average
+
 # Wind
 count = 0
 values = []
@@ -108,7 +109,7 @@ def read_gps_data():
    list_of_valid_statuses = ['A','V']
    with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
       # read 5 lines from the serial output
-      for i in range(10):
+      for i in range(5):
          line = ser.readline().decode('ascii', errors='replace')
          decoded_line = line.strip()
          if decoded_line[0:6] == '$GPVTG':
