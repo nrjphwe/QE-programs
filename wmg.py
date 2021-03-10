@@ -129,7 +129,7 @@ def read_gps_data():
                print ('Speed over ground = ' + str(speed))
                true_course = msg.true_course
                print ('True Course = ' + str(true_course))
-      return (lat, lon, speed, true_course)
+         return (lat, lon, speed, true_course)
 
 if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
