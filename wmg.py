@@ -1,9 +1,9 @@
 #!/usr/bin/python3
+import serial, pynmea2, string 
 import RPi.GPIO as GPIO
 from time import sleep
 import sys, time, math
-import board
-import busio
+import board, busio
 import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
@@ -14,6 +14,12 @@ ads = ADS.ADS1015(i2c)
 ads.gain = 2/3
 # Create differential input between channel 0 and 1
 chan_diff = AnalogIn(ads, ADS.P0, ADS.P1)
+
+# initialize GPIO
+def init_GPIO():           # initialize GPIO
+   GPIO.setmode(GPIO.BCM)
+   GPIO.setwarnings(False)
+   GPIO.setup(sensor,GPIO.IN,GPIO.PUD_UP) #### question
 
 # setup db
 import mariadb
@@ -38,7 +44,7 @@ def add_data(cursor, wind_dir, lat, lon, speed, true_course, wmg):
       print(f"Error inserting to db: {e}")
       sys.exit(1)
       
-# calculate average wind direct
+# calculate average wind direction
 def get_average(angles):
     sin_sum = 0.0
     cos_sum = 0.0
@@ -99,6 +105,7 @@ lon= 58.1
 if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
      while True:
+        
           print (get_value())
           wind_dir = round(get_value(),1)
           print('wind_dir = '+ str(wind_dir))
