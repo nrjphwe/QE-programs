@@ -10,9 +10,6 @@ from adafruit_ads1x15.analog_in import AnalogIn
 # startup numbers
 lat = 19.0
 lon = 58.0
-wind_direction = 45.0
-speed = 0.0
-true_course = 22.0
 
 # Create the I2C bus
 i2c = busio.I2C(board.SCL, board.SDA)
