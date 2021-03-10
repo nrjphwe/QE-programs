@@ -10,6 +10,7 @@ from adafruit_ads1x15.analog_in import AnalogIn
 # startup numbers
 lat = 19.0
 lon = 58.0
+true_course = 180
 speed = 0
 
 # Create the I2C bus
