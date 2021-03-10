@@ -10,6 +10,7 @@ from adafruit_ads1x15.analog_in import AnalogIn
 # startup numbers
 lat = 19.0
 lon = 58.0
+speed = 0
 
 # Create the I2C bus
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -135,6 +136,7 @@ if __name__ == "__main__":
           wind_dir = round(get_value(),1)
           print('wind_dir = '+ str(wind_dir))
           read_gps_data(lat, lon, speed, true_course)
+          print('speed = ' + speed)
           alpha = wind_dir - true_course
           print ('alpha = ' + str(alpha))
           wmg = math.cos(alpha)*speed
