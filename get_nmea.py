@@ -69,7 +69,7 @@ with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
                 print ('True Course = '+ str(true_course))
                 alpha = true_course - wind_direction
                 print (alpha)
-                wmg = math.cos(alpha)
+                wmg = math.cos(alpha)*speed
                 print(wmg)
                 try:
                     add_data(cursor,lat, lon, speed, true_course)
