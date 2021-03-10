@@ -90,6 +90,12 @@ def get_value(length=5):
         data.append(angle)
     return get_average(data)
 
+speed=5
+true_course=180
+wmg= 4
+lat= 19
+lon= 58
+
 if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
      while True:
@@ -97,7 +103,7 @@ if __name__ == "__main__":
           wind_dir = round(get_value(),1)
           print('wind_dir = '+ str(wind_dir))
           try:
-              add_data(cursor, wind_dir)
+              add_data(cursor, wind_dir, lat, lon, speed, true_course, wmg)
           except mariadb.Error as e:
               print(f"line 81 Error inserting to db: {e}")
               sys.exit(1)
