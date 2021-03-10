@@ -32,8 +32,8 @@ def add_data(cursor, lat, lon, speed, true_course,wmg):
       sys.exit(1)
 
 def read_gps_data(lat, lon, speed, true_course):
+   list_of_valid_statuses = ['A','V']
    try:
-      list_of_valid_statuses = ['A','V']
       with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
       # read 5 lines from the serial output
       for i in range(5):
