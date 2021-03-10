@@ -138,6 +138,7 @@ if __name__ == "__main__":
           print('wind_dir = '+ str(wind_dir))
           read_gps_data(lat, lon, speed, true_course)
           print('speed = ' + str(speed))
+          print (true_course)
           speed = round(speed,1)
           alpha = wind_dir - true_course
           print ('alpha = ' + str(alpha))
