@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import serial, pynmea2, string
 import sys,math
 
@@ -57,7 +58,7 @@ def read_gps_data(lat, lon, speed, true_course):
                print ('Speed over ground = ' + str(speed))
                true_course = msg.true_course
                print ('True Course = '+ str(true_course)
-                       
+
 if __name__ == "__main__":
    while Thrue: 
       read_gps_data(lat, lon, speed, true_course)
@@ -69,4 +70,4 @@ if __name__ == "__main__":
          add_data(cursor,lat, lon, speed, true_course, wmg)
       except mariadb.Error as e:
          print(f"Error inserting to db: {e}")
-         sys.exit(1)      
+         sys.exit(1)
