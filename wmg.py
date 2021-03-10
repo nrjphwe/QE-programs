@@ -147,6 +147,6 @@ if __name__ == "__main__":
           except mariadb.Error as e:
               print(f"line 81 Error inserting to db: {e}")
               sys.exit(1)
-print(f"Last Inserted ID: {cursor.lastrowid}")
-cursor.close()
-conn.close()
+     print(f"Last Inserted ID: {cursor.lastrowid}")
+     cursor.close()
+     conn.close()
