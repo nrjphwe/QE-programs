@@ -31,31 +31,22 @@ def add_data(cursor, lat, lon, speed, true_course,wmg):
       print(f"Error inserting to db: {e}")
       sys.exit(1)
 
-list_of_valid_statuses = ['A','V']
-with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
-    # read 10 lines from the serial output
-    for i in range(5):
-        line = ser.readline().decode('ascii', errors='replace')
-#        print (line)
-        decoded_line = (line.strip(string.punctuation))
-#        print (decoded_line)
-    while True:
-        line = ser.readline().decode('ascii', errors='replace')
-#        print (line)
-        decoded_line = line.strip()
-        if decoded_line[0:6] == '$GPVTG':
+def read_gps_data()
+   try:
+      list_of_valid_statuses = ['A','V']
+      with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
+      # read 5 lines from the serial output
+      for i in range(5):
+         line = ser.readline().decode('ascii', errors='replace')
+         decoded_line = line.strip()
+         if decoded_line[0:6] == '$GPVTG':
             print ("VTG line")
             msg = pynmea2.parse(str(decoded_line))
             print ('Speed over ground = ' + str(msg.spd_over_grnd_kts) + ' True track made good = ' +str(msg.true_track))
-            #for i in range(len(msg.fields)):
-            #    print (msg.fields[i], msg.data[i])
-        if decoded_line[0:6] == '$GPRMC':
+         if decoded_line[0:6] == '$GPRMC':
             msg = pynmea2.parse(str(decoded_line))
             if str(msg.status) in list_of_valid_statuses:
                 print ("RMC line")
-                #print (msg.datetime,msg.latitude, msg.longitude)
-                #for i in range(len(msg.fields)):
-                #    print (msg.fields[i], msg.data[i])
                 lat = msg.latitude
                 print (lat)
                 lon = msg.longitude
@@ -71,8 +62,12 @@ with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
                 print (alpha)
                 wmg = math.cos(alpha)*speed
                 print(wmg)
-                try:
-                    add_data(cursor,lat, lon, speed, true_course, wmg)
-                except mariadb.Error as e:
-                    print(f"Error inserting to db: {e}")
-                    sys.exit(1)      
+                  
+if __name__ == "__main__":
+   while Thrue: 
+      read_gps_data()
+      try:
+         add_data(cursor,lat, lon, speed, true_course, wmg)
+      except mariadb.Error as e:
+         print(f"Error inserting to db: {e}")
+         sys.exit(1)      
