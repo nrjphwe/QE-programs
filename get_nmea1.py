@@ -34,29 +34,29 @@ def add_data(cursor, lat, lon, speed, true_course,wmg):
 def read_gps_data(lat, lon, speed, true_course):
    list_of_valid_statuses = ['A','V']
    with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
-   # read 5 lines from the serial output
-   for i in range(5):
-      line = ser.readline().decode('ascii', errors='replace')
-      decoded_line = line.strip()
-      if decoded_line[0:6] == '$GPVTG':
-         print ("VTG line")
-         msg = pynmea2.parse(str(decoded_line))
-         print ('Speed over ground = ' + str(msg.spd_over_grnd_kts) + ' True track made good = ' +str(msg.true_track))
-      if decoded_line[0:6] == '$GPRMC':
-         msg = pynmea2.parse(str(decoded_line))
-         if str(msg.status) in list_of_valid_statuses:
-            print ("RMC line")
-            lat = msg.latitude
-            print (lat)
-            lon = msg.longitude
-             #lat = ("%02d°%07.4f'" % (msg.latitude, msg.latitude_minutes))
-             #lon = ("%02d°%07.4f'" % (msg.longitude, msg.longitude_minutes))
-             #gps = "Latitude=" + str(lat) + "and Longitude=" + str(lon)
-             #print(gps)
-             speed = msg.spd_over_grnd
-             print ('Speed over ground = ' + str(speed))
-             true_course = msg.true_course
-             print ('True Course = '+ str(true_course)
+      # read 5 lines from the serial output
+      for i in range(5):
+         line = ser.readline().decode('ascii', errors='replace')
+         decoded_line = line.strip()
+         if decoded_line[0:6] == '$GPVTG':
+            print ("VTG line")
+            msg = pynmea2.parse(str(decoded_line))
+            print ('Speed over ground = ' + str(msg.spd_over_grnd_kts) + ' True track made good = ' +str(msg.true_track))
+         if decoded_line[0:6] == '$GPRMC':
+            msg = pynmea2.parse(str(decoded_line))
+            if str(msg.status) in list_of_valid_statuses:
+               print ("RMC line")
+               lat = msg.latitude
+               print (lat)
+               lon = msg.longitude
+               #lat = ("%02d°%07.4f'" % (msg.latitude, msg.latitude_minutes))
+               #lon = ("%02d°%07.4f'" % (msg.longitude, msg.longitude_minutes))
+               #gps = "Latitude=" + str(lat) + "and Longitude=" + str(lon)
+               #print(gps)
+               speed = msg.spd_over_grnd
+               print ('Speed over ground = ' + str(speed))
+               true_course = msg.true_course
+               print ('True Course = '+ str(true_course)
                  
 wind_direction =45
                        
