@@ -2,6 +2,9 @@
 import serial, pynmea2, string
 import sys,math
 
+# startup numbers
+lot = 19.0
+
 # setup db
 import mariadb
 from python_mysql_dbconfig import read_db_config
