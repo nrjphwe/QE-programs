@@ -1,5 +1,5 @@
 import serial, pynmea2, string
-import math
+import sys,math
 
 # setup db
 import mariadb
