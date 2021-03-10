@@ -24,7 +24,7 @@ def init_GPIO():           # initialize GPIO
 def add_data(cursor, lat, lon, speed, true_course):
    try: # def Add data to Mariadb
       """Adds the given data to the tables"""
-      sql_insert_query = (f'INSERT INTO gps (lat, lon, speed, true_course) VALUES ({lat:.11},{lon:.11},{speed:.6},{true_course:.1f})')
+      sql_insert_query = (f'INSERT INTO gps (lat, lon, speed, true_course, wmg) VALUES ({lat:.11},{lon:.11},{speed:.6},{true_course:.1f},{wmg:.2f})')
       cursor.execute(sql_insert_query)
       conn.commit()
    except mariadb.Error as e:
@@ -72,7 +72,7 @@ with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
                 wmg = math.cos(alpha)*speed
                 print(wmg)
                 try:
-                    add_data(cursor,lat, lon, speed, true_course)
+                    add_data(cursor,lat, lon, speed, true_course, wmg)
                 except mariadb.Error as e:
                     print(f"Error inserting to db: {e}")
                     sys.exit(1)      
