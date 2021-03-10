@@ -7,6 +7,8 @@ lat = 19.0
 lon = 58.0
 wind_direction = 45
 speed = 0
+true_course = 22
+
 # setup db
 import mariadb
 from python_mysql_dbconfig import read_db_config
