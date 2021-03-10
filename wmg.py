@@ -137,7 +137,7 @@ if __name__ == "__main__":
           wind_dir = round(get_value(),1)
           print('wind_dir = '+ str(wind_dir))
           read_gps_data(lat, lon, speed, true_course)
-          print('speed = ' + speed)
+          print('speed = ' + str(speed))
           alpha = wind_dir - true_course
           print ('alpha = ' + str(alpha))
           wmg = math.cos(alpha)*speed
