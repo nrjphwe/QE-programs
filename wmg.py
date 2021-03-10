@@ -7,6 +7,13 @@ import board, busio
 import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
+# startup numbers
+lat = 19.0
+lon = 58.0
+wind_direction = 45.0
+speed = 0.0
+true_course = 22.0
+
 # Create the I2C bus
 i2c = busio.I2C(board.SCL, board.SDA)
 # Create the ADC object using the I2C bus
@@ -96,19 +103,45 @@ def get_value(length=5):
         data.append(angle)
     return get_average(data)
 
-speed=5.0
-true_course=180.0
-wmg= 4.1
-lat= 19.1
-lon= 58.1
+def read_gps_data(lat, lon, speed, true_course):
+   list_of_valid_statuses = ['A','V']
+   with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
+      # read 5 lines from the serial output
+      for i in range(5):
+         line = ser.readline().decode('ascii', errors='replace')
+         decoded_line = line.strip()
+         if decoded_line[0:6] == '$GPVTG':
+            print ("VTG line")
+            msg = pynmea2.parse(str(decoded_line))
+            print ('Speed over ground = ' + str(msg.spd_over_grnd_kts) + ' True track made good = ' +str(msg.true_track))
+         if decoded_line[0:6] == '$GPRMC':
+            msg = pynmea2.parse(str(decoded_line))
+            if str(msg.status) in list_of_valid_statuses:
+               print ("RMC line")
+               lat = msg.latitude
+               print (lat)
+               lon = msg.longitude
+               #lat = ("%02d°%07.4f'" % (msg.latitude, msg.latitude_minutes))
+               #lon = ("%02d°%07.4f'" % (msg.longitude, msg.longitude_minutes))
+               #gps = "Latitude=" + str(lat) + "and Longitude=" + str(lon)
+               #print(gps)
+               speed = msg.spd_over_grnd
+               print ('Speed over ground = ' + str(speed))
+               true_course = msg.true_course
+               print ('True Course = '+ str(true_course))
+               return (lat, lon, speed, true_course)
 
 if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
      while True:
-        
           print (get_value())
           wind_dir = round(get_value(),1)
           print('wind_dir = '+ str(wind_dir))
+          read_gps_data(lat, lon, speed, true_course)
+          alpha = true_course - wind_dir
+          print (alpha)
+          wmg = math.cos(alpha)*speed
+          print(wmg)
           try:
               add_data(cursor, wind_dir, lat, lon, speed, true_course, wmg)
           except mariadb.Error as e:
