@@ -136,16 +136,12 @@ def read_gps_data():
 if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
      while True:
-          print (get_value())
+          #print (get_value())
           wind_dir = round(get_value(),1)
-          print('wind_dir = '+ str(wind_dir))
           #read_gps_data(lat, lon, speed, true_course)
           read_gps_data()   
-          print('speed = ' + str(speed))
-          print (true_course)
-          speed = round(speed,1)
+          speed = round(speed,2)
           alpha = wind_dir - true_course
-          print ('alpha = ' + str(alpha))
           wmg = math.cos(alpha)*speed
           print(wmg)
           try:
