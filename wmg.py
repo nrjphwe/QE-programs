@@ -107,7 +107,7 @@ def read_gps_data(lat, lon, speed, true_course):
    list_of_valid_statuses = ['A','V']
    with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
       # read 5 lines from the serial output
-      for i in range(5):
+      for i in range(10):
          line = ser.readline().decode('ascii', errors='replace')
          decoded_line = line.strip()
          if decoded_line[0:6] == '$GPVTG':
@@ -128,7 +128,7 @@ def read_gps_data(lat, lon, speed, true_course):
                speed = msg.spd_over_grnd
                print ('Speed over ground = ' + str(speed))
                true_course = msg.true_course
-               print ('True Course = '+ str(true_course))
+               print ('True Course = ' + str(true_course))
                return (lat, lon, speed, true_course)
 
 if __name__ == "__main__":
@@ -138,8 +138,8 @@ if __name__ == "__main__":
           wind_dir = round(get_value(),1)
           print('wind_dir = '+ str(wind_dir))
           read_gps_data(lat, lon, speed, true_course)
-          alpha = true_course - wind_dir
-          print (alpha)
+          alpha = wind_dir - true_course
+          print ('alpha = 'alpha')
           wmg = math.cos(alpha)*speed
           print(wmg)
           try:
