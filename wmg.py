@@ -90,11 +90,11 @@ def get_value(length=5):
         data.append(angle)
     return get_average(data)
 
-speed=5
-true_course=180
-wmg= 4
-lat= 19
-lon= 58
+speed=5.0
+true_course=180.0
+wmg= 4.1
+lat= 19.1
+lon= 58.1
 
 if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
