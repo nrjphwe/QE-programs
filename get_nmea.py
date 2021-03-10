@@ -24,7 +24,7 @@ def init_GPIO():           # initialize GPIO
 def add_data(cursor, lat, lon, speed, true_course):
    try: # def Add data to Mariadb
       """Adds the given data to the tables"""
-      sql_insert_query = (f'INSERT INTO gps (lat, lon, speed, true_course) VALUES ({lat:11},{lon:11},{speed:6},{true_course:6})')
+      sql_insert_query = (f'INSERT INTO gps (lat, lon, speed, true_course) VALUES ({lat:11},{lon:11},{speed:6},%s)')
       cursor.execute(sql_insert_query)
       conn.commit()
    except mariadb.Error as e:
