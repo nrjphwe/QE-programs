@@ -1,8 +1,10 @@
 import serial, pynmea2, string
+import math
 
 # setup db
 import mariadb
 from python_mysql_dbconfig import read_db_config
+wind_direction = 45
 dbconfig = read_db_config()
 conn = None
 try:
@@ -65,6 +67,10 @@ with serial.Serial('/dev/ttyAMA0', baudrate=4800, timeout=1) as ser:
                 print ('Speed over ground = ' + str(speed))
                 true_course = msg.true_course
                 print ('True Course = '+ str(true_course))
+                alpha = true_course - wind-direction
+                print (alpha)
+                wmg = cos(alpha)
+                print(wmg)
                 try:
                     add_data(cursor,lat, lon, speed, true_course)
                 except mariadb.Error as e:
