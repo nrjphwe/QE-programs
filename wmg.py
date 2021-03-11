@@ -74,9 +74,9 @@ def get_average(angles):
 # Wind
 count = 0
 values = []
-def get_value(length=5):
+def get_value(length=4):
     data = []
-    print("Measuring wind direction for %d seconds..." % length)
+    #print("Measuring wind direction for %d seconds..." % length)
     start_time = time.time()
     while time.time() - start_time <= length:
         wind_volt =round(chan_diff.voltage,2)
@@ -137,9 +137,7 @@ def read_gps_data():
 if __name__ == "__main__":
 #    obj = wind_direction(0, "wind_direction.json")
      while True:
-          #print (get_value())
           wind_dir = round(get_value(),1)
-          #read_gps_data(lat, lon, speed, true_course)
           read_gps_data()   
           speed = round(speed,2)
           alpha = wind_dir - true_course
