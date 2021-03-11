@@ -143,7 +143,7 @@ if __name__ == "__main__":
           read_gps_data()   
           speed = round(speed,2)
           alpha = wind_dir - true_course
-          wmg = (math.cos(alpha))*speed
+          wmg = abs((math.cos(alpha))*speed)
           print(wmg)
           try:
               add_data(cursor, wind_dir, lat, lon, speed, true_course, wmg)
